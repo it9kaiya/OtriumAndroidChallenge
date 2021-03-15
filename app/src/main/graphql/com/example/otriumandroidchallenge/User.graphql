@@ -13,6 +13,7 @@ query User {
     pinnedItems(first: 3) {
       nodes {
         ... on Repository {
+          id
           name
           owner {
             avatarUrl
@@ -28,6 +29,7 @@ query User {
     }
     topRepositories(orderBy: {field: CREATED_AT, direction: ASC}, first: 10) {
       nodes {
+        id
         name
         owner {
           avatarUrl
@@ -42,6 +44,7 @@ query User {
     }
     starredRepositories(first: 10) {
       nodes {
+        id
         name
         owner {
           avatarUrl

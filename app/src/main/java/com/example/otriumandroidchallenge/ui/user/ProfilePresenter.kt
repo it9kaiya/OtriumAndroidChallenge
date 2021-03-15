@@ -7,32 +7,34 @@ import com.example.otriumandroidchallenge.data.remote.repo.user.ProfileRepositor
 import com.example.otriumandroidchallenge.ui.base.BasePresenter
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
-class ProfilePresenter(val repo: ProfileRepositoryImpl): BasePresenter<ProfileView>() {
+class ProfilePresenter(val repo: ProfileRepositoryImpl) : BasePresenter<ProfileView>() {
+
+    private val TAG = "ProfilePresenter"
 
     private val mCompositeDisposable = CompositeDisposable()
 
     private val userLiveData: MutableLiveData<UserQuery.Data> = MutableLiveData()
+    private val refreshedUserLiveData: MutableLiveData<UserQuery.Data> = MutableLiveData()
 
-    fun test() {
-        Log.d("TAG", "test: Profile presenter is working")
-
+    fun getProfileData(isRefresh: Boolean) {
         mCompositeDisposable.add(
             repo.getProfileInfo()
                 .doOnError {
-                    println("The Number Is: ${it.message}")
                     userLiveData.postValue(null)
                 }
                 .subscribe(
                     {
-//                        if (it.errors?.size  == 0) {
+                        if (!isRefresh)
                             userLiveData.postValue(it.data)
-//                        } else {
-//                            userLiveData.postValue(null)
-//                        }
+                        else
+                            refreshedUserLiveData.postValue(it.data)
                     },
                     { t ->
-                        userLiveData.postValue(null)
-                        print(t.message)
+                        if (!isRefresh)
+                            userLiveData.postValue(null)
+                        else
+                            refreshedUserLiveData.postValue(null)
+                        Log.e(TAG, t.message)
                     }
                 )
         );
@@ -45,5 +47,9 @@ class ProfilePresenter(val repo: ProfileRepositoryImpl): BasePresenter<ProfileVi
 
     fun getUserLiveData(): MutableLiveData<UserQuery.Data> {
         return userLiveData
+    }
+
+    fun getRefreshedUserLiveData(): MutableLiveData<UserQuery.Data> {
+        return refreshedUserLiveData
     }
 }

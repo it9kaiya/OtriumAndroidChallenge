@@ -5,18 +5,21 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.cache.http.ApolloHttpCache
+import com.apollographql.apollo.cache.http.DiskLruHttpCacheStore
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.example.otriumandroidchallenge.R
 import com.example.otriumandroidchallenge.network.AuthorizationInterceptor
-import com.example.otriumandroidchallenge.util.Constant
+import com.example.otriumandroidchallenge.util.Constants
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 import javax.inject.Singleton
 
 @Module
@@ -30,13 +33,24 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun provideCacheFile(context: Context) : File {
+        return File(context.cacheDir, "apolloCache")
+    }
+
+    @Singleton
+    @Provides
+    fun provideCacheStore(file : File) : DiskLruHttpCacheStore {
+        return DiskLruHttpCacheStore(file, 1024 * 1024)
+    }
+    @Singleton
+    @Provides
     fun provideAuthorizationInterceptor(context: Context): AuthorizationInterceptor {
         return AuthorizationInterceptor(context)
     }
 
     @Singleton
     @Provides
-    fun provideApolloClient(authorizationInterceptor: AuthorizationInterceptor): ApolloClient {
+    fun provideApolloClient(authorizationInterceptor: AuthorizationInterceptor, cacheStore : DiskLruHttpCacheStore): ApolloClient {
         return ApolloClient.builder()
             .serverUrl("https://api.github.com/graphql")
             .okHttpClient(
@@ -44,6 +58,7 @@ class AppModule {
                     .addInterceptor(authorizationInterceptor)
                     .build()
             )
+            .httpCache(ApolloHttpCache(cacheStore))
             .build()
     }
 
@@ -51,7 +66,7 @@ class AppModule {
     @Provides
     fun provideRetrofitInstance(): Retrofit? {
         return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

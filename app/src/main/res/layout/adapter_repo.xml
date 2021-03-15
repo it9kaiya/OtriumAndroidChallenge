@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     app:cardCornerRadius="8dp"
@@ -22,16 +22,16 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/source_sans_pro_regular"
             android:gravity="start"
-            android:hint="setaylor"
+            tools:text="setaylor"
             android:textColor="#000000"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageViewProfile"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewProfileImg"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageViewProfile"
-            app:layout_constraintTop_toTopOf="@+id/imageViewProfile" />
+            app:layout_constraintStart_toEndOf="@+id/imageViewProfileImg"
+            app:layout_constraintTop_toTopOf="@+id/imageViewProfileImg" />
 
         <ImageView
-            android:id="@+id/imageViewProfile"
+            android:id="@+id/imageViewProfileImg"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
@@ -50,9 +50,10 @@
             android:gravity="center_vertical"
             android:textColor="#000000"
             android:textSize="16sp"
+            android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageViewProfile"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile"
+            app:layout_constraintStart_toStartOf="@+id/imageViewProfileImg"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewProfileImg"
             tools:text="telegraph-android" />
 
         <TextView
@@ -64,10 +65,12 @@
             android:gravity="center_vertical"
             android:textColor="#000000"
             android:textSize="16sp"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageViewProfile"
+            app:layout_constraintStart_toStartOf="@+id/imageViewProfileImg"
             app:layout_constraintTop_toBottomOf="@+id/textViewRepoName"
-            tools:text="Telegraph X is Android client" />
+            tools:text="Telegraph X is Android client see the klittle" />
 
         <ImageView
             android:id="@+id/imageView"

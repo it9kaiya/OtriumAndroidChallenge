@@ -13,15 +13,4 @@ class MainActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
-
-    private class AuthorizationInterceptor(val context: Context): Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val request = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer c48d4e200d95a90378cfa32d8ad88cf0183ebae5")
-                    .build()
-
-
-            return chain.proceed(request)
-        }
-    }
 }
